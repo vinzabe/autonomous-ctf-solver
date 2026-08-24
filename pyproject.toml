@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autonomous-ctf-solver"
+version = "1.0.0"
+description = "A bounded CTF-solving agent with leak-proof scoring: a hard step/tool budget, a sandboxed tool surface, and a scorer that verifies flags by hash so the flag text never enters a prompt and cannot be memorised or leaked into the score."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "vinzabe", email = "gabejar@usa.com" }]
+keywords = ["security", "ctf", "agent", "evaluation", "capture-the-flag"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Information Technology",
+  "Topic :: Security",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov", "hypothesis>=6", "mypy>=1.8", "ruff>=0.5"]
+
+[project.scripts]
+ctfsolver = "ctfsolver.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/vinzabe/autonomous-ctf-solver"
+Issues = "https://github.com/vinzabe/autonomous-ctf-solver/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ctfsolver"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = "src"
+packages = ["ctfsolver"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "ARG"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402", "S101", "ARG001", "ARG002", "ARG005", "F841"]
